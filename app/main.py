@@ -49,6 +49,8 @@ class HandAsMouse:
 
                 img = self.mouse_left_click(fingers, hd, img)
 
+                img = self.mouse_right_click(fingers, hd, img)
+
             c_time = time.time()
             fps = 1 / (c_time - self.p_time)
             self.p_time = c_time
@@ -64,8 +66,8 @@ class HandAsMouse:
             # if 0xFF == ord('q'):
             #     cv2.destroyAllWindows()
 
-    def mouse_left_click(self, fingers, hd, img):
-        if fingers[1] == 1 and fingers[2] == 1:
+    def mouse_right_click(self, fingers, hd, img):
+        if fingers[4] == 1:
             length, img, line_info = hd.find_distance(8, 12, img)
 
             # cv2.putText(img, f'{int(length)}',
@@ -73,7 +75,28 @@ class HandAsMouse:
             #             3, (255, 0, 0), 3)
             # img = cv2.flip(img, 1)
 
-            if length < 40:
+            # if length < 70:
+            #     cv2.circle(
+            #         img,
+            #         (line_info[4], line_info[5]),
+            #         15, (0, 255, 0),
+            #         cv2.FILLED)
+            pyautogui.click(button='right')
+                # time.sleep(1)
+        return img
+
+
+    def mouse_left_click(self, fingers, hd, img):
+        if fingers[0] == 1 and fingers[1] != 1:
+        # if fingers[1] == 1 and fingers[2] == 1:
+            length, img, line_info = hd.find_distance(8, 12, img)
+
+            # cv2.putText(img, f'{int(length)}',
+            #             (20, 50), cv2.FONT_HERSHEY_PLAIN,
+            #             3, (255, 0, 0), 3)
+            # img = cv2.flip(img, 1)
+
+            if length < 70:
                 cv2.circle(
                     img,
                     (line_info[4], line_info[5]),
