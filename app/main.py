@@ -72,6 +72,7 @@ class HandAsMouse:
             #             (20, 50), cv2.FONT_HERSHEY_PLAIN,
             #             3, (255, 0, 0), 3)
             # img = cv2.flip(img, 1)
+
             if length < 40:
                 cv2.circle(
                     img,
