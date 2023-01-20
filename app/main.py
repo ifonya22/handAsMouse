@@ -9,6 +9,18 @@ import os
 # os.environ['DISPLAY'] = ':1'
 
 
+class ActionTimer:
+    def __init__(self, sec=.95):
+        self.time = time.time()
+        self.sec = sec
+
+    def is_done(self):
+        if self.time + self.sec <= time.time():
+            return True
+        else:
+            return False
+
+
 class HandAsMouse:
     def __init__(self):
         self.cam_width, self.cam_height = 640, 480
@@ -18,6 +30,10 @@ class HandAsMouse:
         # cloc_x, cloc_y = 0, 0
         self.smoothening = 7
         pyautogui.PAUSE = 0
+        self.mrc_timer = True
+        self.mlc_timer = True
+        self.mrc_a = ActionTimer()
+        self.mlc_a = ActionTimer()
 
     def main(self):
 
@@ -25,6 +41,7 @@ class HandAsMouse:
         cap.set(3, self.cam_width)
         cap.set(4, self.cam_height)
         hd = HandDetector()
+
         src_width, src_height = pyautogui.size()
 
         while True:
@@ -45,11 +62,17 @@ class HandAsMouse:
                     (255, 0, 255),
                     2)
 
-                self.mosue_move(fingers, img, src_height, src_width, x1, y1)
+                self.mouse_move(fingers, img, src_height, src_width, x1, y1)
 
-                img = self.mouse_left_click(fingers, hd, img)
+                print(self.mlc_timer if self.mlc_timer is False else f'{self.mlc_timer} {time.time()} aboba')
+                if self.mrc_timer:
 
-                img = self.mouse_right_click(fingers, hd, img)
+                    img = self.mouse_right_click(fingers, hd, img)
+                if self.mlc_timer:
+
+                    img = self.mouse_left_click(fingers, hd, img)
+                self.mrc_timer = self.mrc_a.is_done()
+                self.mlc_timer = self.mlc_a.is_done()
 
             c_time = time.time()
             fps = 1 / (c_time - self.p_time)
@@ -67,46 +90,27 @@ class HandAsMouse:
             #     cv2.destroyAllWindows()
 
     def mouse_right_click(self, fingers, hd, img):
-        if fingers[4] == 1:
-            length, img, line_info = hd.find_distance(8, 12, img)
+        if fingers[4] == 1 and not fingers[0]:
+            self.mrc_a = ActionTimer()
+            # length, img, line_info = hd.find_distance(8, 12, img)
+            pyautogui.click(button='right')
+            # time.sleep(1)
+        return img
 
-            # cv2.putText(img, f'{int(length)}',
-            #             (20, 50), cv2.FONT_HERSHEY_PLAIN,
-            #             3, (255, 0, 0), 3)
-            # img = cv2.flip(img, 1)
-
+    def mouse_left_click(self, fingers, hd, img):
+        if fingers[0] == 1:
+            self.mlc_a = ActionTimer()
+            # length, img, line_info = hd.find_distance(8, 12, img)
             # if length < 70:
             #     cv2.circle(
             #         img,
             #         (line_info[4], line_info[5]),
             #         15, (0, 255, 0),
             #         cv2.FILLED)
-            pyautogui.click(button='right')
-                # time.sleep(1)
+            pyautogui.click()
         return img
 
-
-    def mouse_left_click(self, fingers, hd, img):
-        if fingers[0] == 1 and fingers[1] != 1:
-        # if fingers[1] == 1 and fingers[2] == 1:
-            length, img, line_info = hd.find_distance(8, 12, img)
-
-            # cv2.putText(img, f'{int(length)}',
-            #             (20, 50), cv2.FONT_HERSHEY_PLAIN,
-            #             3, (255, 0, 0), 3)
-            # img = cv2.flip(img, 1)
-
-            if length < 70:
-                cv2.circle(
-                    img,
-                    (line_info[4], line_info[5]),
-                    15, (0, 255, 0),
-                    cv2.FILLED)
-                pyautogui.click()
-                # time.sleep(1)
-        return img
-
-    def mosue_move(self, fingers, img, src_height, src_width, x1, y1):
+    def mouse_move(self, fingers, img, src_height, src_width, x1, y1):
         if fingers[1] == 1 and fingers[2] == 0:
             x3 = np.interp(
                 x1,
