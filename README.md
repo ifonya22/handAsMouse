@@ -1,3 +1,4 @@
+Works only on python 3.7 - 3.10!\
 Download
 ```
 $ git clone https://github.com/ifonya22/handAsMouse
