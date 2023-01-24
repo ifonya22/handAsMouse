@@ -64,7 +64,7 @@ class HandAsMouse:
 
                 self.mouse_move(fingers, img, src_height, src_width, x1, y1)
 
-                print(self.mlc_timer if self.mlc_timer is False else f'{self.mlc_timer} {time.time()} aboba')
+                # print(self.mlc_timer if self.mlc_timer is False else f'{self.mlc_timer} {time.time()} aboba')
                 if self.mrc_timer:
 
                     img = self.mouse_right_click(fingers, hd, img)
@@ -98,7 +98,8 @@ class HandAsMouse:
         return img
 
     def mouse_left_click(self, fingers, hd, img):
-        if fingers[0] == 1:
+        # if fingers[0] == 1:
+        if hd.finger_like():
             self.mlc_a = ActionTimer()
             # length, img, line_info = hd.find_distance(8, 12, img)
             # if length < 70:
