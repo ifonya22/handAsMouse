@@ -65,7 +65,7 @@ class HandAsMouse:
                 self.mouse_move(fingers, img, src_height, src_width, x1, y1)
 
                 # print(self.mlc_timer if self.mlc_timer is False else f'{self.mlc_timer} {time.time()} aboba')
-                if self.mrc_timer and not self.drag(hd, img):
+                if self.mrc_timer:# and not self.drag(hd, img):
                     img = self.mouse_right_click(fingers, hd, img)
 
                 if self.mlc_timer:
@@ -102,7 +102,9 @@ class HandAsMouse:
             return False
 
     def mouse_right_click(self, fingers, hd, img):
-        if fingers[4] == 1 and not fingers[0]:
+        img, state = hd.is_pinkey_up(img)
+        if state:
+        # if fingers[4] == 1 and not fingers[0]:
             self.mrc_a = ActionTimer()
             # length, img, line_info = hd.find_distance(8, 12, img)
             pyautogui.click(button='right')

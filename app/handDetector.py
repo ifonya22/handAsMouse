@@ -101,6 +101,31 @@ class HandDetector:
 
         return fingers
 
+    def is_pinkey_up(self, img):
+        cnt = 0
+        # i=12
+        # for i in self.tip_ids:
+        #
+        #     img = cv2.putText(img, f'{i/4}', (self.lmList[i][1], self.lmList[i][2]),
+        #                       cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0),
+        #                       2, cv2.LINE_AA)
+        for i in range(1, 4):
+            print(self.lmList[i][2], self.lmList[20][2], self.lmList[i][2] > self.lmList[20][2])
+            if self.lmList[i][2] > self.lmList[20][2]:
+
+                cnt += 1
+            else:
+                print(False)
+                return img, False
+        if cnt >= 3:
+            img = cv2.circle(img, (self.lmList[20][1], self.lmList[20][2]), 5, (0, 0, 255), cv2.FILLED)
+
+            print(True)
+            return img, True
+        img = cv2.circle(img, (self.lmList[20][1], self.lmList[20][2]), 5, (0, 255, 0), cv2.FILLED)
+
+        return img, False
+
     def finger_like(self):
         # print(self.lmList[4][2], self.lmList[8][2])
         if self.lmList[4][2] < self.lmList[8][2]:
