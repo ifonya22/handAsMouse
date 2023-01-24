@@ -65,16 +65,17 @@ class HandAsMouse:
                 self.mouse_move(fingers, img, src_height, src_width, x1, y1)
 
                 # print(self.mlc_timer if self.mlc_timer is False else f'{self.mlc_timer} {time.time()} aboba')
-                if self.mrc_timer:
-
+                if self.mrc_timer and not self.drag(hd, img):
                     img = self.mouse_right_click(fingers, hd, img)
+
                 if self.mlc_timer:
 
                     img = self.mouse_left_click(fingers, hd, img)
+
                 self.mrc_timer = self.mrc_a.is_done()
                 self.mlc_timer = self.mlc_a.is_done()
 
-                self.drag(hd, img)
+
 
             c_time = time.time()
             fps = 1 / (c_time - self.p_time)
@@ -93,10 +94,12 @@ class HandAsMouse:
 
     def drag(self, hd, img):
         length, img, line_info = hd.find_distance(4, 8, img)
-        if length < img.shape[0]/18:
+        if length < img.shape[0] / 20:
             pyautogui.mouseDown()
+            return True
         else:
             pyautogui.mouseUp()
+            return False
 
     def mouse_right_click(self, fingers, hd, img):
         if fingers[4] == 1 and not fingers[0]:
