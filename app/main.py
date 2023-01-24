@@ -74,6 +74,8 @@ class HandAsMouse:
                 self.mrc_timer = self.mrc_a.is_done()
                 self.mlc_timer = self.mlc_a.is_done()
 
+                self.drag(hd, img)
+
             c_time = time.time()
             fps = 1 / (c_time - self.p_time)
             self.p_time = c_time
@@ -88,6 +90,13 @@ class HandAsMouse:
 
             # if 0xFF == ord('q'):
             #     cv2.destroyAllWindows()
+
+    def drag(self, hd, img):
+        length, img, line_info = hd.find_distance(4, 8, img)
+        if length < img.shape[0]/18:
+            pyautogui.mouseDown()
+        else:
+            pyautogui.mouseUp()
 
     def mouse_right_click(self, fingers, hd, img):
         if fingers[4] == 1 and not fingers[0]:
