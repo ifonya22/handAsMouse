@@ -104,10 +104,8 @@ class HandDetector:
     def finger_like(self):
         # print(self.lmList[4][2], self.lmList[8][2])
         if self.lmList[4][2] < self.lmList[8][2]:
-            print(True, self.lmList[4][1], self.lmList[8][2])
-
+            # print(True, self.lmList[4][1], self.lmList[8][2])
             return True
         else:
-            print(False, self.lmList[4][1], self.lmList[8][2])
-
+            # print(False, self.lmList[4][1], self.lmList[8][2])
             return False
